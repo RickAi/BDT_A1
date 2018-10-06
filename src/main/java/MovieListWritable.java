@@ -1,4 +1,3 @@
-import org.apache.giraph.utils.ArrayListWritable;
 import org.apache.hadoop.io.LongWritable;
 
 public class MovieListWritable extends ArrayListWritable<LongWritable> {

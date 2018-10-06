@@ -35,11 +35,6 @@
             <artifactId>hadoop-client</artifactId>
             <version>${hadoopVersion}</version>
         </dependency>
-        <dependency>
-            <groupId>org.apache.giraph</groupId>
-            <artifactId>giraph-core</artifactId>
-            <version>1.2.0</version>
-        </dependency>
         <!-- Hadoop -->
 
     </dependencies>

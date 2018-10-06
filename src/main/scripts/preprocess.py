@@ -23,12 +23,12 @@ with open(FILE_DIR_BASE + FILE_SRC_NAME, "r") as f:
             first_line = False
             continue
 
-        if count >= 10 * 1000:
-            break
-
         tokens = line.split(",")
         if len(tokens) != 4 or float(tokens[2]) < 0.5 or float(tokens[2]) > 5:
             continue
+
+        if count >= 10 * 1000:
+            break;
 
         user_id = long(tokens[0])
         movie_id = long(tokens[1])
