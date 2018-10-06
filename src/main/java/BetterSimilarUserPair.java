@@ -121,27 +121,23 @@ public class BetterSimilarUserPair {
             // emit like movie with UserPref
             String[] likeMoviesToken = tokens[3].split(",");
             for (String movie : likeMoviesToken) {
-                try {
-                    LongWritable movieId = new LongWritable(Long.valueOf(movie));
-                    BooleanWritable like = new BooleanWritable(true);
-                    UserPrefWritable userPref = new UserPrefWritable(userInfo, like);
-                    context.write(movieId, userPref);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                if (movie.length() == 0) continue;
+
+                LongWritable movieId = new LongWritable(Long.valueOf(movie));
+                BooleanWritable like = new BooleanWritable(true);
+                UserPrefWritable userPref = new UserPrefWritable(userInfo, like);
+                context.write(movieId, userPref);
             }
 
             // emit unlike movie with UserPref
             String[] unlikeMoviesToken = tokens[4].split(",");
             for (String movie : unlikeMoviesToken) {
-                try {
-                    LongWritable movieId = new LongWritable(Long.valueOf(movie));
-                    BooleanWritable like = new BooleanWritable(false);
-                    UserPrefWritable userPref = new UserPrefWritable(userInfo, like);
-                    context.write(movieId, userPref);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                if (movie.length() == 0) continue;
+
+                LongWritable movieId = new LongWritable(Long.valueOf(movie));
+                BooleanWritable like = new BooleanWritable(false);
+                UserPrefWritable userPref = new UserPrefWritable(userInfo, like);
+                context.write(movieId, userPref);
             }
         }
     }
