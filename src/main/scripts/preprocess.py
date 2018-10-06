@@ -28,7 +28,7 @@ with open(FILE_DIR_BASE + FILE_SRC_NAME, "r") as f:
             continue
 
         if count >= 10 * 1000:
-            break;
+            break
 
         user_id = long(tokens[0])
         movie_id = long(tokens[1])

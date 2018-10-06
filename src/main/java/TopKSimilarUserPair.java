@@ -1,3 +1,4 @@
+import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapreduce.Job;
@@ -5,6 +6,7 @@ import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.util.GenericOptionsParser;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,10 +25,6 @@ public class TopKSimilarUserPair {
      * Mapper:  line -> (movieId | UserInfo)
      * Reducer: (movieId | UserInfo1...UserInfoN) -> (UserPair | similarity)
      */
-
-    private static final Path PATH_INPUT = new Path("src/main/resources/ratings_simplify.txt");
-    private static final Path PATH_TMP = new Path("src/main/resources/tmp");
-    private static final Path PATH_OUTPUT = new Path("src/main/resources/output");
 
     private static class UserInfoMapper extends Mapper<LongWritable, Text, LongWritable, UserInfoWritable> {
 
@@ -126,7 +124,7 @@ public class TopKSimilarUserPair {
             DoubleWritable similarity = new DoubleWritable(Double.valueOf(tokens[1]));
             context.write(new UserPairWritable(firstUserId, secondUserId), similarity);
         }
-        
+
     }
 
     private static class RemoveDuplicateReducer extends Reducer<UserPairWritable, DoubleWritable, UserPairWritable, DoubleWritable> {
@@ -141,34 +139,28 @@ public class TopKSimilarUserPair {
 
     public static void main(String[] args) {
 
-        // delete output file first
-        File file = new File(PATH_OUTPUT.toString());
-        if (file.exists()) {
-            file.delete();
-        }
-
         try {
-            File tempFile = new File(PATH_TMP.toString());
-            if (!tempFile.exists()) {
-                Job userPairJob = Job.getInstance();
-                userPairJob.setJarByClass(TopKSimilarUserPair.class);
+            Configuration conf = new Configuration();
+            String[] otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
 
-                userPairJob.setMapperClass(UserInfoMapper.class);
-                userPairJob.setReducerClass(UserInfoReducer.class);
+            Job userPairJob = Job.getInstance();
+            userPairJob.setJarByClass(TopKSimilarUserPair.class);
 
-                userPairJob.setMapOutputKeyClass(LongWritable.class);
-                userPairJob.setMapOutputValueClass(UserInfoWritable.class);
-                userPairJob.setOutputKeyClass(UserPairWritable.class);
-                userPairJob.setOutputValueClass(DoubleWritable.class);
+            userPairJob.setMapperClass(UserInfoMapper.class);
+            userPairJob.setReducerClass(UserInfoReducer.class);
 
-                FileInputFormat.addInputPath(userPairJob, PATH_INPUT);
-                FileOutputFormat.setOutputPath(userPairJob, PATH_TMP);
+            userPairJob.setMapOutputKeyClass(LongWritable.class);
+            userPairJob.setMapOutputValueClass(UserInfoWritable.class);
+            userPairJob.setOutputKeyClass(UserPairWritable.class);
+            userPairJob.setOutputValueClass(DoubleWritable.class);
 
-                if (userPairJob.waitForCompletion(true)) {
-                    System.out.println("userPairJob job success.");
-                } else {
-                    System.out.println("userPairJob job failed.");
-                }
+            FileInputFormat.addInputPath(userPairJob, new Path(otherArgs[0]));
+            FileOutputFormat.setOutputPath(userPairJob, new Path(otherArgs[1]));
+
+            if (userPairJob.waitForCompletion(true)) {
+                System.out.println("userPairJob job success.");
+            } else {
+                System.out.println("userPairJob job failed.");
             }
 
             Job removeDupJob = Job.getInstance();
@@ -182,8 +174,8 @@ public class TopKSimilarUserPair {
             removeDupJob.setOutputKeyClass(UserPairWritable.class);
             removeDupJob.setOutputValueClass(DoubleWritable.class);
 
-            FileInputFormat.addInputPath(removeDupJob, PATH_TMP);
-            FileOutputFormat.setOutputPath(removeDupJob, PATH_OUTPUT);
+            FileInputFormat.addInputPath(removeDupJob, new Path(otherArgs[1]));
+            FileOutputFormat.setOutputPath(removeDupJob, new Path(otherArgs[2]));
 
             if (removeDupJob.waitForCompletion(true)) {
                 System.out.println("removeDupJob job success.");
