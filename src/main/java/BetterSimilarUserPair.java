@@ -114,9 +114,8 @@ public class BetterSimilarUserPair {
 
             // parse UserInfo
             LongWritable userId = new LongWritable(Long.valueOf(tokens[0]));
-            LongWritable likeCount = new LongWritable(Long.valueOf(tokens[1]));
-            LongWritable unlikeCount = new LongWritable(Long.valueOf(tokens[2]));
-            UserInfoWritable userInfo = new UserInfoWritable(userId, likeCount, unlikeCount);
+            LongWritable ratingCount = new LongWritable(Long.valueOf(tokens[1]) + Long.valueOf(tokens[2]));
+            UserInfoWritable userInfo = new UserInfoWritable(userId, ratingCount);
 
             // emit like movie with UserPref
             String[] likeMoviesToken = tokens[3].split(",");
@@ -181,12 +180,12 @@ public class BetterSimilarUserPair {
 
             String[] pairTokens = lineTokens[0].split("-");
             String[] userTokens = pairTokens[0].split(",");
-            UserInfoWritable firstUser = new UserInfoWritable(Long.valueOf(userTokens[0]),
-                    Long.valueOf(userTokens[1]), Long.valueOf(userTokens[2]));
+            UserInfoWritable firstUser = new UserInfoWritable(
+                    Long.valueOf(userTokens[0]), Long.valueOf(userTokens[1]));
 
             userTokens = pairTokens[1].split(",");
-            UserInfoWritable secondUser = new UserInfoWritable(Long.valueOf(userTokens[0]),
-                    Long.valueOf(userTokens[1]), Long.valueOf(userTokens[2]));
+            UserInfoWritable secondUser = new UserInfoWritable(
+                    Long.valueOf(userTokens[0]), Long.valueOf(userTokens[1]));
             UserPairWritable userPair = new UserPairWritable(firstUser, secondUser);
 
             String[] prefTokens = lineTokens[1].split(",");

@@ -8,31 +8,26 @@ import java.io.IOException;
 public class UserInfoWritable implements WritableComparable<UserInfoWritable> {
 
     LongWritable userId;
-    LongWritable likeCount;
-    LongWritable unlikeCount;
+    LongWritable ratingCount;
 
     public UserInfoWritable() {
         userId = new LongWritable();
-        likeCount = new LongWritable();
-        unlikeCount = new LongWritable();
+        ratingCount = new LongWritable();
     }
 
-    public UserInfoWritable(LongWritable userId, LongWritable likeCount, LongWritable unlikeCount) {
+    public UserInfoWritable(LongWritable userId, LongWritable ratingCount) {
         this.userId = userId;
-        this.likeCount = likeCount;
-        this.unlikeCount = unlikeCount;
+        this.ratingCount = ratingCount;
     }
 
-    public UserInfoWritable(long userId, long likeCount, long unlikeCount) {
+    public UserInfoWritable(long userId, long ratingCount) {
         this.userId = new LongWritable(userId);
-        this.likeCount = new LongWritable(likeCount);
-        this.unlikeCount = new LongWritable(unlikeCount);
+        this.ratingCount = new LongWritable(ratingCount);
     }
 
     public UserInfoWritable(UserInfoWritable other) {
         this.userId = new LongWritable(other.userId.get());
-        this.likeCount = new LongWritable(other.likeCount.get());
-        this.unlikeCount = new LongWritable(other.unlikeCount.get());
+        this.ratingCount = new LongWritable(other.ratingCount.get());
     }
 
     public int compareTo(UserInfoWritable o) {
@@ -41,20 +36,18 @@ public class UserInfoWritable implements WritableComparable<UserInfoWritable> {
 
     public void write(DataOutput dataOutput) throws IOException {
         userId.write(dataOutput);
-        likeCount.write(dataOutput);
-        unlikeCount.write(dataOutput);
+        ratingCount.write(dataOutput);
     }
 
     public void readFields(DataInput dataInput) throws IOException {
         userId.readFields(dataInput);
-        likeCount.readFields(dataInput);
-        unlikeCount.readFields(dataInput);
+        ratingCount.readFields(dataInput);
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(userId.get()).append(",").append(likeCount.get()).append(",").append(unlikeCount.get());
+        sb.append(userId.get()).append(",").append(ratingCount.get());
         return sb.toString();
     }
 

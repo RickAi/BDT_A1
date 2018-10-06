@@ -31,8 +31,7 @@ public class UserPairWritable implements WritableComparable<UserPairWritable> {
 
     public double jaccardDistance(long commonLikeCount, long commonUnlikeCount) {
         long commonCount = commonLikeCount + commonUnlikeCount;
-        long base = firstUser.likeCount.get() + firstUser.unlikeCount.get()
-                + secondUser.likeCount.get() + secondUser.unlikeCount.get();
+        long base = firstUser.ratingCount.get() + secondUser.ratingCount.get();
         return (double) commonCount / (base - commonCount);
     }
 
