@@ -15,6 +15,8 @@ print("start simplify the ratings.csv")
 count = 0
 first_line = True
 
+MAX_COUNT = -1
+
 # (userId, [[like_movie_list], [unlike_movie_list]])
 user_rating_map = dict()
 with open(FILE_DIR_BASE + FILE_SRC_NAME, "r") as f:
@@ -27,7 +29,7 @@ with open(FILE_DIR_BASE + FILE_SRC_NAME, "r") as f:
         if len(tokens) != 4 or float(tokens[2]) < 0.5 or float(tokens[2]) > 5:
             continue
 
-        if count >= 10 * 1000:
+        if MAX_COUNT > 0 and count >= MAX_COUNT:
             break
 
         user_id = long(tokens[0])
@@ -48,14 +50,25 @@ for user_id in user_rating_map:
     line = str(user_id)
     line += ":"
 
-    for movie_id in user_rating_map[user_id][0]:
-        line += str(movie_id) + ","
-    line = line[:-1]
+    # like count
+    line += str(len(user_rating_map[user_id][0]))
+    line += ":"
+    # unlike count
+    line += str(len(user_rating_map[user_id][1]))
     line += ":"
 
+    # like movie list
+    for movie_id in user_rating_map[user_id][0]:
+        line += str(movie_id) + ","
+    if len(user_rating_map[user_id][0]) > 0:
+        line = line[:-1]
+    line += ":"
+
+    # unlike movie list
     for movie_id in user_rating_map[user_id][1]:
         line += str(movie_id) + ","
-    line = line[:-1]
+    if len(user_rating_map[user_id][1]) > 0:
+        line = line[:-1]
 
     dst_file.write(line + "\n")
 

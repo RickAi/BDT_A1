@@ -1,4 +1,3 @@
-import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.WritableComparable;
 
 import java.io.DataInput;
@@ -7,39 +6,54 @@ import java.io.IOException;
 
 public class UserPairWritable implements WritableComparable<UserPairWritable> {
 
-    private LongWritable firstUserId;
-    private LongWritable secondUserId;
+    UserInfoWritable firstUser;
+    UserInfoWritable secondUser;
 
     public UserPairWritable() {
-        firstUserId = new LongWritable();
-        secondUserId = new LongWritable();
+        firstUser = new UserInfoWritable();
+        secondUser = new UserInfoWritable();
     }
 
-    public UserPairWritable(UserPairWritable otherPair) {
-        firstUserId = new LongWritable(otherPair.firstUserId.get());
-        secondUserId = new LongWritable(otherPair.secondUserId.get());
-    }
-
-    public UserPairWritable(LongWritable firstUserId, LongWritable secondUserId) {
-        this.firstUserId = firstUserId;
-        this.secondUserId = secondUserId;
+    public UserPairWritable(UserInfoWritable firstUser, UserInfoWritable secondUser) {
+        this.firstUser = firstUser;
+        this.secondUser = secondUser;
     }
 
     public void write(DataOutput dataOutput) throws IOException {
-        firstUserId.write(dataOutput);
-        secondUserId.write(dataOutput);
+        firstUser.write(dataOutput);
+        secondUser.write(dataOutput);
     }
 
     public void readFields(DataInput dataInput) throws IOException {
-        firstUserId.readFields(dataInput);
-        secondUserId.readFields(dataInput);
+        firstUser.readFields(dataInput);
+        secondUser.readFields(dataInput);
+    }
+
+    public double jaccardDistance(long commonLikeCount, long commonUnlikeCount) {
+        long commonCount = commonLikeCount + commonUnlikeCount;
+        long base = firstUser.likeCount.get() + firstUser.unlikeCount.get()
+                + secondUser.likeCount.get() + secondUser.unlikeCount.get();
+        return (double) commonCount / (base - commonCount);
+    }
+
+    @Override
+    public String toString() {
+        return firstUser.toString() + "-" + secondUser.toString();
+    }
+
+    public int compareTo(UserPairWritable other) {
+        if (this.firstUser.getUserId() == other.firstUser.getUserId()){
+            return (int) (this.secondUser.getUserId() - other.secondUser.getUserId());
+        } else{
+            return (int) (this.firstUser.getUserId() - other.firstUser.getUserId());
+        }
     }
 
     @Override
     public int hashCode() {
         int res = 17;
-        res = res * 31 + (int) Math.min(firstUserId.get(), secondUserId.get());
-        res = res * 31 + (int) Math.max(firstUserId.get(), secondUserId.get());
+        res = res * 31 + (int) Math.min(firstUser.getUserId(), secondUser.getUserId());
+        res = res * 31 + (int) Math.max(firstUser.getUserId(), secondUser.getUserId());
         return res;
     }
 
@@ -47,24 +61,12 @@ public class UserPairWritable implements WritableComparable<UserPairWritable> {
     public boolean equals(Object obj) {
         if (obj instanceof UserPairWritable) {
             UserPairWritable otherPair = (UserPairWritable) obj;
-            return (this.firstUserId.equals(otherPair.firstUserId)
-                    && this.secondUserId.equals(otherPair.secondUserId))
-                    || (this.firstUserId.equals(otherPair.secondUserId)
-                    && this.secondUserId.equals(otherPair.firstUserId));
+            return (this.firstUser.equals(otherPair.firstUser)
+                    && this.secondUser.equals(otherPair.secondUser))
+                    || (this.firstUser.equals(otherPair.secondUser)
+                    && this.secondUser.equals(otherPair.firstUser));
         }
         return false;
     }
 
-    public int compareTo(UserPairWritable other) {
-        if (this.firstUserId.get() == other.firstUserId.get()){
-            return (int) (this.secondUserId.get() - other.secondUserId.get());
-        } else{
-            return (int) (this.firstUserId.get() - other.firstUserId.get());
-        }
-    }
-
-    @Override
-    public String toString() {
-        return this.firstUserId.toString() + "," + this.secondUserId.toString();
-    }
 }

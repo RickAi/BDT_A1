@@ -1,4 +1,6 @@
-import org.apache.hadoop.io.*;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.WritableComparable;
+
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -6,103 +8,66 @@ import java.io.IOException;
 public class UserInfoWritable implements WritableComparable<UserInfoWritable> {
 
     LongWritable userId;
-    MovieListWritable likeMovies;
-    MovieListWritable unlikeMovies;
+    LongWritable likeCount;
+    LongWritable unlikeCount;
 
     public UserInfoWritable() {
         userId = new LongWritable();
-        likeMovies = new MovieListWritable();
-        unlikeMovies = new MovieListWritable();
+        likeCount = new LongWritable();
+        unlikeCount = new LongWritable();
+    }
+
+    public UserInfoWritable(LongWritable userId, LongWritable likeCount, LongWritable unlikeCount) {
+        this.userId = userId;
+        this.likeCount = likeCount;
+        this.unlikeCount = unlikeCount;
+    }
+
+    public UserInfoWritable(long userId, long likeCount, long unlikeCount) {
+        this.userId = new LongWritable(userId);
+        this.likeCount = new LongWritable(likeCount);
+        this.unlikeCount = new LongWritable(unlikeCount);
     }
 
     public UserInfoWritable(UserInfoWritable other) {
-        userId = new LongWritable(other.userId.get());
-        likeMovies = new MovieListWritable(other.getLikeMovies());
-        unlikeMovies = new MovieListWritable(other.getUnlikeMovies());
-    }
-
-    public void write(DataOutput dataOutput) throws IOException {
-        userId.write(dataOutput);
-        likeMovies.write(dataOutput);
-        unlikeMovies.write(dataOutput);
-    }
-
-    public void readFields(DataInput dataInput) throws IOException {
-        userId.readFields(dataInput);
-        likeMovies.readFields(dataInput);
-        unlikeMovies.readFields(dataInput);
-    }
-
-    public void setUserId(LongWritable userId) {
-        this.userId = userId;
-    }
-
-    public void setLikeMovies(MovieListWritable likeMovies) {
-        this.likeMovies = likeMovies;
-    }
-
-    public void setUnlikeMovies(MovieListWritable unlikeMovies) {
-        this.unlikeMovies = unlikeMovies;
-    }
-
-    public MovieListWritable getLikeMovies() {
-        return likeMovies;
-    }
-
-    public MovieListWritable getUnlikeMovies() {
-        return unlikeMovies;
-    }
-
-    /**
-     * A = curUser.Like
-     * B = otherUser.Like
-     * C = curUser.Unlike
-     * D = otherUser.Unlike
-     *
-     * Jaccard distance:
-     *
-     *          (A ^ B) + (C ^ D)
-     * -----------------------------------
-     * (A V B V C V D) - (A ^ B) - (C ^ D)
-     *
-     * @param otherUser
-     * @return
-     */
-    public DoubleWritable jaccardDistance(UserInfoWritable otherUser) {
-        long likeInterCount = intersectCount(this.likeMovies, otherUser.likeMovies);
-        long unlikeInterCount = intersectCount(this.unlikeMovies, otherUser.unlikeMovies);
-        long totalInterCount = likeInterCount + unlikeInterCount;
-        long base = this.likeMovies.size() + otherUser.likeMovies.size()
-                + this.unlikeMovies.size() + otherUser.unlikeMovies.size() - totalInterCount;
-        return new DoubleWritable((double) totalInterCount / base);
-    }
-
-    /**
-     * Assume preprocessed movie id list have been sorted
-     *
-     * @param curMovies
-     * @param otherMovies
-     * @return
-     */
-    private long intersectCount(MovieListWritable curMovies, MovieListWritable otherMovies) {
-        long count = 0l;
-        for (int curIndex = 0, otherIndex = 0;
-             curIndex < curMovies.size() && otherIndex < otherMovies.size(); ) {
-            if (curMovies.get(curIndex).get() == otherMovies.get(otherIndex).get()) {
-                count++;
-                otherIndex++;
-                curIndex++;
-            } else if (curMovies.get(curIndex).get() > otherMovies.get(otherIndex).get()) {
-                otherIndex++;
-            } else {
-                curIndex++;
-            }
-        }
-        return count;
+        this.userId = new LongWritable(other.userId.get());
+        this.likeCount = new LongWritable(other.likeCount.get());
+        this.unlikeCount = new LongWritable(other.unlikeCount.get());
     }
 
     public int compareTo(UserInfoWritable o) {
         return this.userId.compareTo(o.userId);
     }
 
+    public void write(DataOutput dataOutput) throws IOException {
+        userId.write(dataOutput);
+        likeCount.write(dataOutput);
+        unlikeCount.write(dataOutput);
+    }
+
+    public void readFields(DataInput dataInput) throws IOException {
+        userId.readFields(dataInput);
+        likeCount.readFields(dataInput);
+        unlikeCount.readFields(dataInput);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(userId.get()).append(",").append(likeCount.get()).append(",").append(unlikeCount.get());
+        return sb.toString();
+    }
+
+    public long getUserId() {
+        return this.userId.get();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof UserInfoWritable) {
+            UserInfoWritable other = (UserInfoWritable) obj;
+            return this.userId.equals(other.userId);
+        }
+        return false;
+    }
 }

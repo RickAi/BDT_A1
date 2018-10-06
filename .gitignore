@@ -1,4 +1,5 @@
 src/main/resources/*.csv
+src/main/resources/*.txt
 
 .idea
 .DS_Store

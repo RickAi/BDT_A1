@@ -1,3 +1,5 @@
+package old;
+
 import org.apache.hadoop.io.LongWritable;
 
 public class MovieListWritable extends ArrayListWritable<LongWritable> {
