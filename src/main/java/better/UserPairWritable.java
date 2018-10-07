@@ -1,3 +1,5 @@
+package better;
+
 import org.apache.hadoop.io.WritableComparable;
 
 import java.io.DataInput;
@@ -37,7 +39,7 @@ public class UserPairWritable implements WritableComparable<UserPairWritable> {
 
     @Override
     public String toString() {
-        return firstUser.toString() + "," + secondUser.toString();
+        return firstUser.toString() + "-" + secondUser.toString();
     }
 
     public int compareTo(UserPairWritable other) {

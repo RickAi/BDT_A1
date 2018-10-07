@@ -1,4 +1,5 @@
-import com.jcraft.jsch.UserInfo;
+package better;
+
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.BooleanWritable;
@@ -32,24 +33,24 @@ public class BetterSimilarUserPair {
      * ->
      * movieId | userId, movie like count, movie unlike count, type
      * <p>
-     * (UserInfoWritable, UserPrefWritable)
+     * (better.UserInfoWritable, better.UserPrefWritable)
      * <p>
      * UserPairReducer
      * Reducer:
      * movieId | UserPrefWritable1...UserPrefWritableN
      * ->
-     * UserInfoWritable1, UserInfoWritable2 | common like pref, common unlike pref (CommonPrefWritable)
+     * UserInfoWritable1, UserInfoWritable2 | common like pref, common unlike pref (better.CommonPrefWritable)
      * <p>
-     * (UserPairWritable, CommonPrefWritable)
+     * (better.UserPairWritable, better.CommonPrefWritable)
      * <p>
      * <p>
      * CommonPrefMapper
      * Mapper:
-     * line -> UserPairWritable, CommonPrefWritable
+     * line -> better.UserPairWritable, better.CommonPrefWritable
      * <p>
      * CommonPrefReducer
      * Reducer:
-     * old.UserPairWritable, CommonPrefWritable1..N -> old.UserPairWritable, Jaccard Distance
+     * old.better.UserPairWritable, CommonPrefWritable1..N -> old.better.UserPairWritable, Jaccard Distance
      */
 
     public static void main(String[] args) {

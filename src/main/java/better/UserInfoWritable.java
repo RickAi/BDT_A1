@@ -1,3 +1,5 @@
+package better;
+
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.WritableComparable;
 
@@ -46,7 +48,9 @@ public class UserInfoWritable implements WritableComparable<UserInfoWritable> {
 
     @Override
     public String toString() {
-        return userId.toString();
+        StringBuilder sb = new StringBuilder();
+        sb.append(userId.get()).append(",").append(ratingCount.get());
+        return sb.toString();
     }
 
     public long getUserId() {
