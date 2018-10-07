@@ -39,6 +39,7 @@ public class SimilarUserPairMain {
             userPairJob.setJarByClass(SimilarUserPairMain.class);
 
             userPairJob.setMapperClass(UserPairMapper.class);
+            userPairJob.setCombinerClass(UserPairCombiner.class);
             userPairJob.setReducerClass(UserPairReducer.class);
 
             userPairJob.setMapOutputKeyClass(UserPairWritable.class);
@@ -60,7 +61,6 @@ public class SimilarUserPairMain {
     }
 
     private static class UserPairMapper extends Mapper<LongWritable, Text, UserPairWritable, CommonPrefWritable> {
-
         @Override
         protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
             String line = value.toString();
@@ -127,6 +127,26 @@ public class SimilarUserPairMain {
                     context.write(userPair, commonPref);
                 }
             }
+        }
+    }
+
+    private static class UserPairCombiner extends Reducer<UserPairWritable, CommonPrefWritable, UserPairWritable, CommonPrefWritable> {
+        @Override
+        protected void reduce(UserPairWritable key, Iterable<CommonPrefWritable> values, Context context) throws IOException, InterruptedException {
+            long commonLikeCount = 0;
+            long commonUnlikeCount = 0;
+
+            for (CommonPrefWritable pref : values) {
+                if (pref.likeCount.get() != 0) {
+                    commonLikeCount += pref.likeCount.get();
+                }
+
+                if (pref.unlikeCount.get() != 0) {
+                    commonUnlikeCount += pref.unlikeCount.get();
+                }
+            }
+            CommonPrefWritable commonPref = new CommonPrefWritable(commonLikeCount, commonUnlikeCount);
+            context.write(key, commonPref);
         }
     }
 
