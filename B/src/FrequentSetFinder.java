@@ -75,7 +75,7 @@ public class FrequentSetFinder {
 
             List<ItemSet> curItemSets = new ArrayList<>();
             for (ItemSet item : candidateSets) {
-                if (item.getOccurFrequent() > supportThreshold) {
+                if (item.getOccurFrequent() >= supportThreshold) {
                     curItemSets.add(item);
                 }
             }
