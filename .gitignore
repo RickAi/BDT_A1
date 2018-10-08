@@ -1,6 +1,9 @@
-src/main/resources/*.csv
-src/main/resources/*.txt
+A/src/main/resources/*.csv
+A/src/main/resources/*.txt
+A/target
+
+B/files
+B/files/out
 
 .idea
 .DS_Store
-target
