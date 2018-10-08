@@ -12,7 +12,7 @@ public class BucketsGenerator {
     private static final String PATH_BUCKETS = "files/buckets.txt";
 
     // Suppose there are 10000 items, numbered 1 to 10000, and 10000 baskets, also numbered 1 to 10000
-    private static final int BUCKET_SIZE = 20;
+    private static final int BUCKET_SIZE = 10000;
     public static final int MAX_ITEM = BUCKET_SIZE;
 
     private static BucketsGenerator INSTANCE;

@@ -26,7 +26,7 @@ public class Main {
 
         Map<Integer, List<Integer>> buckets = BucketsGenerator.getInstance().generate();
         FrequentSetFinder finder = new FrequentSetFinder(buckets);
-        List<ItemSet> frequentItemList = finder.findFrequentItemList(8);
+        List<ItemSet> frequentItemList = finder.findFrequentItemList(100);
 
         for (ItemSet item : frequentItemList) {
             System.out.println(item.getOccurFrequent() + ":" + item);
@@ -40,7 +40,7 @@ public class Main {
 
         Map<Integer, List<Integer>> buckets = BucketsGenerator.getInstance().generate();
         FrequentSetFinder finder = new FrequentSetFinder(buckets);
-        List<ItemSet> largestSet = finder.findLargestSet(3);
+        List<ItemSet> largestSet = finder.findLargestSet(20);
         for (ItemSet item : largestSet) {
             System.out.println(item.getOccurFrequent() + ":" + item);
         }
