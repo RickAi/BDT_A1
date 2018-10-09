@@ -1,0 +1,40 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/aiyongbiao/Desktop/CUHK/cmsc5741/asgm1/D/Bucket.hpp
+
+/Users/aiyongbiao/Desktop/CUHK/cmsc5741/asgm1/D/BucketChain.hpp
+iostream
+-
+vector
+-
+BucketPair.hpp
+/Users/aiyongbiao/Desktop/CUHK/cmsc5741/asgm1/D/BucketPair.hpp
+math.h
+-
+
+/Users/aiyongbiao/Desktop/CUHK/cmsc5741/asgm1/D/BucketPair.hpp
+Bucket.hpp
+/Users/aiyongbiao/Desktop/CUHK/cmsc5741/asgm1/D/Bucket.hpp
+iostream
+-
+vector
+-
+math.h
+-
+
+/Users/aiyongbiao/Desktop/CUHK/cmsc5741/asgm1/D/main.cpp
+iostream
+-
+fstream
+-
+BucketChain.hpp
+/Users/aiyongbiao/Desktop/CUHK/cmsc5741/asgm1/D/BucketChain.hpp
+map
+-
+
