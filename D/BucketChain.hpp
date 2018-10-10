@@ -77,6 +77,23 @@ public:
         }
     }
 
+    void print() {
+        int size = bucket_pairs_.size();
+        for (int index = 0; index < size; index++) {
+            int level = size - index - 1;
+            BucketPair &pair = bucket_pairs_[index];
+            if (pair.validBucketCount() > 0) {
+                std::cout << " ";
+                pair.print(level);
+                if (index != size - 1) {
+                    std::cout << ",";
+                }
+            }
+        }
+        std::cout << std::endl;
+    }
+
+
     std::vector<BucketPair> bucket_pairs_;
     int range_;
 

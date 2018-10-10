@@ -35,8 +35,17 @@ public class SimilarUserPairMain {
             Configuration conf = new Configuration();
             String[] otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
 
+            if (otherArgs.length < 2) {
+                System.out.println("not enough args...");
+                System.exit(1);
+            }
+
             Job userPairJob = Job.getInstance();
-            userPairJob.setJarByClass(SimilarUserPairMain.class);
+            if (otherArgs.length >= 3) {
+                userPairJob.setJar(otherArgs[2]);
+            } else {
+                userPairJob.setJarByClass(SimilarUserPairMain.class);
+            }
 
             userPairJob.setMapperClass(UserPairMapper.class);
             userPairJob.setCombinerClass(UserPairCombiner.class);

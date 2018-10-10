@@ -23,7 +23,8 @@ int main() {
         // ---
 
         if (timestamp % 1000 == 0) {
-            std::cout << "number of ones in last 1000-bit stream:(" << chain.query() << ", " << debug_map[timestamp / 1000 - 1] << ")/" << timestamp << std::endl;
+            std::cout << "Number of ones in last 1000-bit stream:(" << chain.query() << ", " << debug_map[timestamp / 1000 - 1] << ")/" << timestamp << std::endl;
+            chain.print();
         }
     }
 

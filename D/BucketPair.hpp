@@ -76,6 +76,14 @@ public:
         }
     }
 
+    void print(int level) {
+        for (Bucket &bucket : buckets_) {
+            if (bucket.valid()) {
+                std::cout << pow(2, level) << " ";
+            }
+        }
+    }
+
     std::vector<Bucket> buckets_;
 
 };
