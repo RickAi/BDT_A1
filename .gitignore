@@ -1,6 +1,5 @@
 A/src/main/resources/*.csv
 A/src/main/resources/*.txt
-A/target
 
 B/files
 B/files/out
