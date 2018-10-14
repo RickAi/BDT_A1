@@ -62,6 +62,7 @@ public class FrequentSetFinder {
         int curIteration = 1;
         while (!preItemSets.isEmpty()) {
             curIteration++;
+            long now = System.currentTimeMillis();
 
             List<ItemSet> candidateSets = buildCandidateItemSets(preItemSets);
             for (Map.Entry<Integer, List<Integer>> entry : srcBuckets.entrySet()) {
@@ -84,6 +85,8 @@ public class FrequentSetFinder {
                 itemSetsMap.put(curIteration, curItemSets);
             }
             preItemSets = curItemSets;
+
+            System.out.println("curIteration:" + curIteration + ", cost time:" + (System.currentTimeMillis() - now));
         }
 
         return itemSetsMap;
@@ -96,6 +99,7 @@ public class FrequentSetFinder {
 
     // build next iteration item sets based on the prev sets
     private List<ItemSet> buildCandidateItemSets(List<ItemSet> preItemSets) {
+        long now = System.currentTimeMillis();
         List<ItemSet> res = new ArrayList<ItemSet>();
 
         // loop-loop item sets in the last iteration
@@ -120,6 +124,7 @@ public class FrequentSetFinder {
                 }
             }
         }
+        System.out.println("buildCandidateItemSets cost:" + (System.currentTimeMillis() - now) + ", size:" + res.size());
         return res;
     }
 
