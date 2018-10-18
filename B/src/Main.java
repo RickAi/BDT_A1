@@ -40,7 +40,7 @@ public class Main {
 
         Map<Integer, List<Integer>> buckets = BucketsGenerator.getInstance().generate();
         FrequentSetFinder finder = new FrequentSetFinder(buckets);
-        List<ItemSet> largestSet = finder.findLargestSet(20);
+        List<ItemSet> largestSet = finder.findLargest(20);
         for (ItemSet item : largestSet) {
             System.out.println(item.getOccurFrequent() + ":" + item);
         }

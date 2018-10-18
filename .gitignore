@@ -1,5 +1,6 @@
 A/src/main/resources/*.csv
 A/src/main/resources/*.txt
+A/src/main/resources/output/*
 
 B/files
 B/out
