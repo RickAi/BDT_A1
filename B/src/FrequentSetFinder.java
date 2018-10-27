@@ -20,12 +20,15 @@ public class FrequentSetFinder {
         this.srcBuckets = srcBuckets;
     }
 
-    public List<ItemSet> findFrequentItemList(int supportThreshold) {
+    public List<ItemSet> findFrequentItemList(int supportThreshold, int level) {
         Map<Integer, List<ItemSet>> frequentSets = findFrequentSets(supportThreshold);
         List<ItemSet> res = new ArrayList<>();
 
         for (Map.Entry<Integer, List<ItemSet>> entry : frequentSets.entrySet()) {
-            res.addAll(entry.getValue());
+            if (level > 0 && entry.getKey().equals(level)) {
+                res.addAll(entry.getValue());
+                break;
+            }
         }
         return res;
     }

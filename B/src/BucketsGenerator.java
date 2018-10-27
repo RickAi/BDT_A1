@@ -64,7 +64,7 @@ public class BucketsGenerator {
             FileOutputStream fos = new FileOutputStream(file);
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
             for (Map.Entry<Integer, List<Integer>> entry : buckets.entrySet()) {
-                String line = Arrays.toString(entry.getValue().toArray());
+                String line = convert(entry.getValue());
                 bw.write(line);
                 bw.newLine();
             }
@@ -72,6 +72,15 @@ public class BucketsGenerator {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static String convert(List<Integer> src) {
+        StringBuilder sb = new StringBuilder();
+        for (Integer integer : src) {
+            sb.append(integer).append(" ");
+        }
+        String str = sb.toString();
+        return str.subSequence(0, str.length() - 1).toString();
     }
 
 }
